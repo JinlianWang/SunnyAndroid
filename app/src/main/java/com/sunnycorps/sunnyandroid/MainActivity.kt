@@ -3,10 +3,20 @@ package com.sunnycorps.sunnyandroid
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import com.sunnycorps.network.RetrofitClient
+import com.sunnycorps.network.models.Customer
+import com.sunnycorps.network.services.CustomerServices
 
 import kotlinx.android.synthetic.main.activity_main.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +28,22 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
+        }
+
+        val btn_get_customer = findViewById(R.id.btn_get_customer) as Button
+        btn_get_customer.setOnClickListener {
+            var call = RetrofitClient.getInstance().customerServices.getCustomerById("1")
+            call.enqueue(object : Callback<Customer> {
+                override fun onFailure(call: Call<Customer>?, t: Throwable?) {
+                    Log.v("retrofit", "call failed")
+                }
+
+                override fun onResponse(call: Call<Customer>?, response: Response<Customer>?) {
+                    var customer = response?.body()
+                    Log.v("retrofit", "Customer: " + customer?.firstName + " lastName: " + customer?.lastName)
+                }
+
+            })
         }
     }
 
@@ -36,4 +62,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }
+
