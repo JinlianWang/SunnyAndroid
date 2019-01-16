@@ -7,6 +7,8 @@ import com.sunnycorps.network.services.CustomerServices;
 
 import java.util.concurrent.CompletableFuture;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -28,7 +30,12 @@ public class RetrofitClient {
         return instance;
     }
 
-    public CustomerServices getCustomerServices(){
+    private CustomerServices getCustomerServices(){
         return retrofit.create(CustomerServices.class);
+    }
+
+    public void getCustomerById(String id, Callback<Customer> customerCallback){
+        Call<Customer> call = RetrofitClient.getInstance().getCustomerServices().getCustomerById(id);
+        call.enqueue(customerCallback);
     }
 }

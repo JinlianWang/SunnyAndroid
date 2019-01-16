@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val btn_get_customer = findViewById(R.id.btn_get_customer) as Button
         btn_get_customer.setOnClickListener {
-            var call = RetrofitClient.getInstance().customerServices.getCustomerById("1")
-            call.enqueue(object : Callback<Customer> {
+            RetrofitClient.getInstance().getCustomerById("1", object: Callback<Customer> {
                 override fun onFailure(call: Call<Customer>?, t: Throwable?) {
                     Log.v("retrofit", "call failed")
                 }
@@ -43,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     Log.v("retrofit", "Customer: " + customer?.firstName + " lastName: " + customer?.lastName)
                 }
 
-            })
+            });
         }
     }
 
